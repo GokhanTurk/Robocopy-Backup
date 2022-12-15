@@ -48,7 +48,9 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    $destinationPath = "C:\YEDEKLER\${Folder_Name}"
+    $destinationPath = Read-Host "Enter the destination path"
+    $destinationPath += $Folder_Name
+#    $destinationPath = "C:\YEDEKLER\${Folder_Name}"
     Start-Copy
 }
 
