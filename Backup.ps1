@@ -1,4 +1,5 @@
 Clear-Host
+Add-Type -AssemblyName System.Windows.Forms
 function Select-Disk {
     $disk = @(get-wmiobject win32_logicaldisk -filter "drivetype=3" | select-object -expandproperty name)
     $D_Index_List = @()
@@ -48,8 +49,11 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    $destinationPath = Read-Host "Enter the destination path"
-    $destinationPath += $Folder_Name
+    $FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('MyComputer') }
+    $null = $FileBrowser.ShowDialog()
+    Write-Output $FileBrowser
+    #    $destinationPath = Read-Host "Enter the destination path"
+#    $destinationPath += $Folder_Name
 #    $destinationPath = "C:\YEDEKLER\${Folder_Name}"
     Start-Copy
 }
