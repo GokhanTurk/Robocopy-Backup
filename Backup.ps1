@@ -63,7 +63,8 @@ Function Get-Folder($initialDirectory="")
     [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
 
     $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
-    $foldername.Description = "Select a folder"
+    $foldername.Description = "Select the destination folder:"
+    $foldername.ShowNewFolderButton = $True
     $foldername.rootfolder = "MyComputer"
     $foldername.SelectedPath = $initialDirectory
 
