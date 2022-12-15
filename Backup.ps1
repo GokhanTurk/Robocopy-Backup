@@ -49,7 +49,7 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    $FileBrowser = New-Object System.Windows.Forms.OpenFileDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('MyComputer') }
+    $FileBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('MyComputer') }
     $null = $FileBrowser.ShowDialog()
     Write-Output $FileBrowser
     #    $destinationPath = Read-Host "Enter the destination path"
