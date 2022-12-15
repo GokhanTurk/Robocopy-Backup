@@ -50,7 +50,7 @@ function Select-User {
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
     $destinationPath = Get-Folder
-    Write-output $destinationPath
+    $destinationPath += $Folder_Name
     pause
 #    $destinationPath = Read-Host "Enter the destination path"
 #    $destinationPath += $Folder_Name
@@ -58,12 +58,11 @@ function Select-User {
     Start-Copy
 }
 Function Get-Folder($initialDirectory="")
-
 {
     [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
 
     $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
-    $foldername.Description = "Select the destination folder:"
+    $foldername.Title = "Select the destination folder:"
     $foldername.ShowNewFolderButton = $True
     $foldername.rootfolder = "MyComputer"
     $foldername.SelectedPath = $initialDirectory
