@@ -49,13 +49,29 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    $FileBrowser = New-Object System.Windows.Forms.FolderBrowserDialog -Property @{ InitialDirectory = [Environment]::GetFolderPath('MyComputer') }
-    $null = $FileBrowser.ShowDialog()
-    Write-Output $FileBrowser
-    #    $destinationPath = Read-Host "Enter the destination path"
+    $destinationPath = Get-Folder
+    Write-output $destinationPath
+    pause
+#    $destinationPath = Read-Host "Enter the destination path"
 #    $destinationPath += $Folder_Name
 #    $destinationPath = "C:\YEDEKLER\${Folder_Name}"
     Start-Copy
+}
+Function Get-Folder($initialDirectory="")
+
+{
+    [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
+
+    $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
+    $foldername.Description = "Select a folder"
+    $foldername.rootfolder = "MyComputer"
+    $foldername.SelectedPath = $initialDirectory
+
+    if($foldername.ShowDialog() -eq "OK")
+    {
+        $folder += $foldername.SelectedPath
+    }
+    return $folder
 }
 
 Select-Disk
