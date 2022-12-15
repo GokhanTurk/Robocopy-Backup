@@ -1,4 +1,5 @@
 Clear-Host
+Add-Type -AssemblyName System.Windows.Forms
 function Select-Disk {
     $disk = @(get-wmiobject win32_logicaldisk -filter "drivetype=3" | select-object -expandproperty name)
     $D_Index_List = @()
@@ -48,9 +49,27 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    $destinationPath = "C:\YEDEKLER\${Folder_Name}"
+    Write-Output "Please select the destination folder:"
+    Timeout /t 2
+    $destinationPath = Get-Folder
+    $destinationPath += "\${Folder_Name}"
     Start-Copy
 }
+Function Get-Folder($initialDirectory="")
+{
+    [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms")|Out-Null
 
+    $foldername = New-Object System.Windows.Forms.FolderBrowserDialog
+    $foldername.Description = "Select the destination folder:"
+    $foldername.ShowNewFolderButton = $True
+    $foldername.rootfolder = "MyComputer"
+    $foldername.SelectedPath = $initialDirectory
+
+    if($foldername.ShowDialog() -eq "OK")
+    {
+        $folder += $foldername.SelectedPath
+    }
+    return $folder
+}
 Select-Disk
 Select-User
