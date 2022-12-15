@@ -50,9 +50,9 @@ function Select-User {
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
     Write-Output "Please select the destination folder:"
-    Timeout 2.5
+    Timeout /t 2.5
     $destinationPath = Get-Folder
-    $destinationPath += "_${Folder_Name}"
+    $destinationPath += "\${Folder_Name}"
     Start-Copy
 }
 Function Get-Folder($initialDirectory="")
