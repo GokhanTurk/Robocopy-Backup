@@ -3,6 +3,7 @@ Add-Type -AssemblyName System.Windows.Forms
 function Select-Disk {
     $disk = @(get-wmiobject win32_logicaldisk -filter "drivetype=3" | select-object -expandproperty name)
     $D_Index_List = @()
+    Write-Host "########### DISK LIST ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
     for ($i = 0; $i -le $disk.length - 1; $i++) {
         $Disk_List = "${i}) "
         $Disk_List += $disk[$i]
@@ -13,16 +14,16 @@ function Select-Disk {
         $Disk_Index = Read-Host "Select the source drive"
         if ($Disk_Index -eq "") { $Disk_Index = -1 }
     } while ($D_Index_List -notcontains $Disk_Index)
-    $Selected_Disk = $disk[$Disk_Index]
+    $script:Selected_Disk = $disk[$Disk_Index]
     Clear-Host
-    Write-Output "You chose the $Selected_Disk drive."
+    Select-User
 }
 function Start-Copy {
     param(
         [string[]]$confirm
     )
     do {
-        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath}? (Y/N)"
+        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
     } while ("y", "n" -notcontains $confirm )
     if ($confirm -eq "y") {
         robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
@@ -35,11 +36,12 @@ function Start-Copy {
 function Select-User {
     $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name)
     $U_Index_List = @()
+    Write-Host "########### USER LIST IN $Selected_Disk ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
     for ($i = 0; $i -le $Users.length - 1; $i++) {
         $Users_List = "${i}) "
         $Users_List += $Users[$i]
         $U_Index_List += @($i)
-        Write-Host $Users_List
+        Write-Host $Users_List -Backgroundcolor DarkMagenta -ForeGroundColor White
     }
     do {
         $User_Index = Read-Host "Select the username"
@@ -49,11 +51,14 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    Write-Output "Please select the destination folder:"
-    Timeout /t 2
+    Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
+    Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
     $destinationPath += "\${Folder_Name}"
-    Start-Copy
+    [string] $DestinationDisk = $destinationPath[0]
+    $DestinationDisk +=":"
+    if ($DestinationDisk -eq $Selected_Disk) {Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk}
+    else {Start-Copy}
 }
 Function Get-Folder($initialDirectory="")
 {
@@ -72,4 +77,3 @@ Function Get-Folder($initialDirectory="")
     return $folder
 }
 Select-Disk
-Select-User
