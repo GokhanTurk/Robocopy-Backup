@@ -15,7 +15,7 @@ function Select-Disk {
     } while ($D_Index_List -notcontains $Disk_Index)
     $Selected_Disk = $disk[$Disk_Index]
     Clear-Host
-    Write-Output "You chose the $Selected_Disk drive."
+    Write-Host "You chose the $Selected_Disk drive." -Backgroundcolor DarkGreen -ForeGroundColor White
 }
 function Start-Copy {
     param(
@@ -49,8 +49,8 @@ function Select-User {
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
     $Folder_Name += "_${Selected_User}"
-    Write-Output "Please select the destination folder:"
-    Timeout /t 2
+    Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
+    Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
     $destinationPath += "\${Folder_Name}"
     Start-Copy
