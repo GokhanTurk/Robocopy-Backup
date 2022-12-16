@@ -17,7 +17,6 @@ function Select-Disk {
     $script:Selected_Disk = $disk[$Disk_Index]
     Clear-Host
     Select-User
-#    Write-Host "You chose the $Selected_Disk drive." -Backgroundcolor DarkGreen -ForeGroundColor White
 }
 function Start-Copy {
     param(
@@ -56,8 +55,8 @@ function Select-User {
     Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
     $destinationPath += "\${Folder_Name}"
-    [string] $DestinationDisk = $destinationPath[0] +=":"
-#    $DestinationDisk +=":"
+    [string] $DestinationDisk = $destinationPath[0]
+    $DestinationDisk +=":"
     if ($DestinationDisk -eq $Selected_Disk) {Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk}
     else {Start-Copy}
 }
