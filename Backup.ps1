@@ -14,7 +14,7 @@ function Select-Disk {
         $Disk_Index = Read-Host "Select the source drive"
         if ($Disk_Index -eq "") { $Disk_Index = -1 }
     } while ($D_Index_List -notcontains $Disk_Index)
-    $Selected_Disk = $disk[$Disk_Index]
+    $script:Selected_Disk = $disk[$Disk_Index]
     Clear-Host
     Select-User
 #    Write-Host "You chose the $Selected_Disk drive." -Backgroundcolor DarkGreen -ForeGroundColor White
