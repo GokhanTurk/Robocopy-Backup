@@ -16,6 +16,7 @@ function Select-Disk {
     } while ($D_Index_List -notcontains $Disk_Index)
     $Selected_Disk = $disk[$Disk_Index]
     Clear-Host
+    Select-User
 #    Write-Host "You chose the $Selected_Disk drive." -Backgroundcolor DarkGreen -ForeGroundColor White
 }
 function Start-Copy {
@@ -73,6 +74,4 @@ Function Get-Folder($initialDirectory="")
     }
     return $folder
 }
-
 Select-Disk
-Select-User
