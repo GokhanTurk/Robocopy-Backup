@@ -23,7 +23,7 @@ function Start-Copy {
         [string[]]$confirm
     )
     do {
-        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath}? (Y/N)"
+        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
     } while ("y", "n" -notcontains $confirm )
     if ($confirm -eq "y") {
         robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
@@ -57,7 +57,7 @@ function Select-User {
     $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk +=":"
-    if ($DestinationDisk -eq $Selected_Disk) {Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk}
+    if ($DestinationDisk -eq $Selected_Disk) {Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk}
     else {Start-Copy}
 }
 Function Get-Folder($initialDirectory="")
