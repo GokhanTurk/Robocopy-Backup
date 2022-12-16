@@ -56,7 +56,8 @@ function Select-User {
     Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
     $destinationPath += "\${Folder_Name}"
-    if (${destinationPath}":" -eq $Selected_Disk) {Write-Warning "You can not copy in the same drive. It causes loop."; Select-Disk}
+    $DestinationDisk = $destinationPath[0]+=":"
+    if ($DestinationDisk -eq $Selected_Disk) {Write-Warning "You can not copy in the same drive. It causes loop."; Select-Disk}
     else {Start-Copy}
 }
 Function Get-Folder($initialDirectory="")
