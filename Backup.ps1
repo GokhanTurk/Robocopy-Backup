@@ -7,6 +7,7 @@ function Select-Disk {
         $Disk_List = "${i}) "
         $Disk_List += $disk[$i]
         $D_Index_List += @($i)
+        Write-Host "########### DISK LIST ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
         Write-Output $Disk_List
     }
     do {
@@ -39,7 +40,8 @@ function Select-User {
         $Users_List = "${i}) "
         $Users_List += $Users[$i]
         $U_Index_List += @($i)
-        Write-Host $Users_List
+        Write-Host "########### USER LIST IN ${SelectedDisk} ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
+        Write-Host $Users_List -Backgroundcolor DarkMagenta -ForeGroundColor White
     }
     do {
         $User_Index = Read-Host "Select the username"
