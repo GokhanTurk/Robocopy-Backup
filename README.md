@@ -4,6 +4,6 @@ Robocopy is fastest way to copy files and folders in Windows. This Powershell sc
 You can use this script with this command via Powershell:
 ```Powershell
 
-iwr -useb https://raw.githubusercontent.com/GokhanTurk/Robocopy-Backup/main/Backup.ps1 | iex
+irm raw.githubusercontent.com/GokhanTurk/Robocopy-Backup/main/Backup.ps1 | iex
 
 ```
