@@ -56,6 +56,8 @@ function Select-User {
     Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
     $destinationPath += "\${Folder_Name}"
+    write-output $destinationPath[0]
+    pause
     Start-Copy
 }
 Function Get-Folder($initialDirectory="")
