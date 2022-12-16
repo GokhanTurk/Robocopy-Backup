@@ -36,7 +36,7 @@ function Start-Copy {
 function Select-User {
     $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name)
     $U_Index_List = @()
-    Write-Host "########### USER LIST IN ${Selected_Disk} ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
+    Write-Host "########### USER LIST ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
     for ($i = 0; $i -le $Users.length - 1; $i++) {
         $Users_List = "${i}) "
         $Users_List += $Users[$i]
