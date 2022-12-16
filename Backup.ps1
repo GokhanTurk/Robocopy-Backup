@@ -3,11 +3,11 @@ Add-Type -AssemblyName System.Windows.Forms
 function Select-Disk {
     $disk = @(get-wmiobject win32_logicaldisk -filter "drivetype=3" | select-object -expandproperty name)
     $D_Index_List = @()
+    Write-Host "########### DISK LIST ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
     for ($i = 0; $i -le $disk.length - 1; $i++) {
         $Disk_List = "${i}) "
         $Disk_List += $disk[$i]
         $D_Index_List += @($i)
-        Write-Host "########### DISK LIST ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
         Write-Output $Disk_List
     }
     do {
@@ -36,11 +36,11 @@ function Start-Copy {
 function Select-User {
     $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name)
     $U_Index_List = @()
+    Write-Host "########### USER LIST IN ${SelectedDisk} ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
     for ($i = 0; $i -le $Users.length - 1; $i++) {
         $Users_List = "${i}) "
         $Users_List += $Users[$i]
         $U_Index_List += @($i)
-        Write-Host "########### USER LIST IN ${SelectedDisk} ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
         Write-Host $Users_List -Backgroundcolor DarkMagenta -ForeGroundColor White
     }
     do {
