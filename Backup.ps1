@@ -51,15 +51,18 @@ function Select-User {
     $Folder_Name += "_${Selected_User}"
     Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
     Timeout /t 1 | Out-Null
-    $destinationPath = Get-Folder
-    $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk += ":"
-    if ($DestinationDisk -eq $Selected_Disk) { Clear-Host
-         Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"
+    if ($DestinationDisk -eq $Selected_Disk) { 
+        Clear-Host
+        Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"
         Select-Disk }
     elseif ($destinationPath -eq $null) {Select-User}
-    else { Start-Copy }
+    else { 
+        $destinationPath = Get-Folder
+        $destinationPath += "\${Folder_Name}"
+        Start-Copy 
+        }
 }
 Function Get-Folder($initialDirectory = "") {
     $AssemblyFullName = 'System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'
