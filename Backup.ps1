@@ -12,8 +12,7 @@ function Select-Disk {
     }
     do {
         $Disk_Index = Read-Host "Select the source drive"
-        if ($Disk_Index -eq "") { $Disk_Index = -1 }
-    } while ($D_Index_List -notcontains $Disk_Index)
+    } while (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+"))
     $script:Selected_Disk = $disk[$Disk_Index]
     Clear-Host
     Select-User
@@ -45,8 +44,7 @@ function Select-User {
     }
     do {
         $User_Index = Read-Host "Select the username"
-        if ($User_Index -eq "") { $User_Index = -1 }
-    } while ($U_Index_List -notcontains $User_Index )
+    } while (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+"))
     $Selected_User = $Users[$User_Index]
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
