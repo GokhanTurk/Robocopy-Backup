@@ -55,8 +55,10 @@ function Select-User {
     $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk += ":"
-    if ($DestinationDisk -eq $Selected_Disk) { Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk }
-    else if ($destinationPath -eq $null) {Select-User}
+    if ($DestinationDisk -eq $Selected_Disk) { Clear-Host
+         Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"
+        Select-Disk }
+    elseif ($destinationPath -eq $null) {Select-User}
     else { Start-Copy }
 }
 Function Get-Folder($initialDirectory = "") {
