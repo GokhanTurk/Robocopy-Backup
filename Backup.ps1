@@ -39,7 +39,7 @@ function Select-User {
     $destinationPath = Get-Folder
     if ("" -eq $destinationPath) {
         Clear-Host
-        Write-Warning "You didn't select a destination folder!"
+        Write-Warning "You have not selected a destination folder!"
         Select-User
     }
     $destinationPath += "\${Folder_Name}"
