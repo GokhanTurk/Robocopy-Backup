@@ -17,21 +17,6 @@ function Select-Disk {
     Clear-Host
     Select-User
 }
-function Start-Copy {
-    param(
-        [string[]]$confirm
-    )
-    do {
-        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
-    } while ("y", "n" -notcontains $confirm )
-    if ($confirm -eq "y") {
-        robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-        robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads" /s /e /mt:32 /r:0 /w:0 /xjd /XF *.tmp
-        robocopy "$sourcePath\Documents\" "$destinationPath\Documents" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-        robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-    }
-    else { Clear-Host; Select-User }
-}
 function Select-User {
     $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name)
     $U_Index_List = @()
@@ -51,12 +36,12 @@ function Select-User {
     $Folder_Name += "_${Selected_User}"
     Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
     Timeout /t 1 | Out-Null
-    do {
-        $destinationPath = Get-Folder
-    } while (
-        if($destinationPath -eq $null) {Clear-Host; Select-User}
-    )
-    
+    $destinationPath = Get-Folder
+    if ("" -eq $destinationPath) {
+        Clear-Host
+        Write-Warning "You didn't select a destination folder!"
+        Select-User
+    }
     $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk += ":"
@@ -92,5 +77,22 @@ Function Get-Folder($initialDirectory = "") {
     }
     $folder = $OpenFileDialog.FileName
     return $folder
+}
+
+function Start-Copy {
+    param(
+        [string[]]$confirm
+    )
+    do {
+        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
+    } while ("y", "n" -notcontains $confirm )
+    if ($confirm -eq "y") {
+        robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads" /s /e /mt:32 /r:0 /w:0 /xjd /XF *.tmp
+        robocopy "$sourcePath\Documents\" "$destinationPath\Documents" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        Read-Host -Prompt "Press Enter to exit!"
+    }
+    else { Clear-Host; Select-User }
 }
 Select-Disk
