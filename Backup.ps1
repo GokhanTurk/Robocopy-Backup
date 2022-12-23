@@ -51,8 +51,12 @@ function Select-User {
     $Folder_Name += "_${Selected_User}"
     Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
     Timeout /t 1 | Out-Null
-    $destinationPath = Get-Folder
-    if($destinationPath -eq $null) {Clear-Host; Select-User}
+    do {
+        $destinationPath = Get-Folder
+    } while (
+        if($destinationPath -eq $null) {Clear-Host; Select-User}
+    )
+    
     $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk += ":"
