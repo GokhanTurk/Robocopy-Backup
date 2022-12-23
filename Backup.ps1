@@ -12,26 +12,10 @@ function Select-Disk {
     }
     do {
         $Disk_Index = Read-Host "Select the source drive"
-        if ($Disk_Index -eq "") { $Disk_Index = -1 }
-    } while ($D_Index_List -notcontains $Disk_Index)
+    } while (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+"))
     $script:Selected_Disk = $disk[$Disk_Index]
     Clear-Host
     Select-User
-}
-function Start-Copy {
-    param(
-        [string[]]$confirm
-    )
-    do {
-        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
-    } while ("y", "n" -notcontains $confirm )
-    if ($confirm -eq "y") {
-        robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-        robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads" /s /e /mt:32 /r:0 /w:0 /xjd /XF *.tmp
-        robocopy "$sourcePath\Documents\" "$destinationPath\Documents" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-        robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
-    }
-    else { Clear-Host; Select-User }
 }
 function Select-User {
     $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name)
@@ -45,8 +29,7 @@ function Select-User {
     }
     do {
         $User_Index = Read-Host "Select the username"
-        if ($User_Index -eq "") { $User_Index = -1 }
-    } while ($U_Index_List -notcontains $User_Index )
+    } while (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+"))
     $Selected_User = $Users[$User_Index]
     $sourcePath = "$Selected_Disk\Users\${Selected_User}"
     $Folder_Name = Get-Date -Format "dd.MM.yyyy"
@@ -54,6 +37,11 @@ function Select-User {
     Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
     Timeout /t 1 | Out-Null
     $destinationPath = Get-Folder
+    if ("" -eq $destinationPath) {
+        Clear-Host
+        Write-Warning "You have not selected a destination folder!"
+        Select-User
+    }
     $destinationPath += "\${Folder_Name}"
     [string] $DestinationDisk = $destinationPath[0]
     $DestinationDisk += ":"
@@ -89,5 +77,22 @@ Function Get-Folder($initialDirectory = "") {
     }
     $folder = $OpenFileDialog.FileName
     return $folder
+}
+
+function Start-Copy {
+    param(
+        [string[]]$confirm
+    )
+    do {
+        $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
+    } while ("y", "n" -notcontains $confirm )
+    if ($confirm -eq "y") {
+        robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads" /s /e /mt:32 /r:0 /w:0 /xjd /XF *.tmp
+        robocopy "$sourcePath\Documents\" "$destinationPath\Documents" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp
+        Read-Host -Prompt "Press Enter to exit!"
+    }
+    else { Clear-Host; Select-User }
 }
 Select-Disk
