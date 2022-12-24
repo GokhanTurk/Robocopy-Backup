@@ -7,3 +7,9 @@ You can use this script with this command via PowerShell:
 irm raw.githubusercontent.com/GokhanTurk/Robocopy-Backup/main/Backup.ps1 | iex
 
 ```
+Or shorter:
+```Powershell
+
+irm tinyurl.com/backupps1 | iex
+
+```
