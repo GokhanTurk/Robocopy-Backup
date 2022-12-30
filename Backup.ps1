@@ -5,15 +5,14 @@ try {
     function Select-Action {
         Write-Host "1) Backup User Data" -BackgroundColor DarkGreen -ForegroundColor White
         Write-Host "(It will copy the following folders of selected user: Desktop, Documents, Downloads, Google Chrome user data)" -BackgroundColor DarkGreen -ForegroundColor White
-        Write-Host "2) Backup a Specific Folder" -BackgroundColor DarkBlue -ForegroundColor White
-        Write-Host "(You can copy whole disk or one folder with this selection)" -BackgroundColor DarkBlue -ForegroundColor White
+        Write-Host "2) Backup a Folder or Entire Disk" -BackgroundColor DarkBlue -ForegroundColor White
         Write-Host "3) Exit" -BackgroundColor DarkRed -ForegroundColor White
     
         switch (Read-Host $SelectedAction "What do you want to do?") {
             1 { Select-Disk }
             2 { Backup-Folder }
             3 { Exit }
-            default {Clear-Host; Write-Warning "INPUTS MUST BE A NUMBER!"; Select-Action }
+            default { Clear-Host; Write-Warning "INPUTS MUST BE A NUMBER!"; Select-Action }
         }
     }
     function Select-Disk {
@@ -59,8 +58,7 @@ try {
             Select-User
         }
         $destinationPath += "\${Folder_Name}"
-        [string] $DestinationDisk = $destinationPath[0]
-        $DestinationDisk += ":"
+        [string] $DestinationDisk = $destinationPath[0] + ":"
         if ($DestinationDisk -eq $Selected_Disk) { Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Disk }
         else { Copy-UserData }
     }
@@ -69,10 +67,15 @@ try {
             $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
-            robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp /A-:SH
-            robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads" /s /e /mt:32 /r:0 /w:0 /xjd /XF *.tmp /A-:SH
-            robocopy "$sourcePath\Documents\" "$destinationPath\Documents" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp /A-:SH
-            robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google" /s /e /mt:32 /r:0 /w:0 /XF /xjd *.tmp /A-:SH
+            robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Documents\" "$destinationPath\Documents"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            attrib.exe -h  -s  -a $destinationPath\Desktop
+            attrib.exe -h  -s  -a $destinationPath\Downloads
+            attrib.exe -h  -s  -a $destinationPath\Documents
+            attrib.exe -h  -s  -a $destinationPath\Google
+            Write-Host "The process is completed! You can check the log $env:userprofile\Desktop\Robocopy-Backup.log" -BackgroundColor DarkGreen -ForegroundColor White
             Read-Host -Prompt "Press Enter to exit!"
             Exit
         }
@@ -126,13 +129,23 @@ try {
             Write-Warning "You have not selected a destination folder!"
             Select-Action
         }
-        $destinationPath += "\"
-        $destinationPath += Split-Path $sourcePath -Leaf
+        $sourceFolderName = Split-Path $sourcePath -Leaf
+        if ($sourceFolderName.Contains(":")) {
+            $sourceDisk = $sourceFolderName
+            $sourceFolderName = $sourceFolderName -replace ":", " Backup"
+        }
+        $destinationPath += "\Backup_" + (Get-Date -Format "dd.MM.yyyy") + "\" + ${sourceFolderName}.TrimEnd('\')
+        
         do {
-            $confirm = Read-Host "Are you confirming that $sourcePath files will be copied to $destinationPath (Y/N)"
+            Clear-Host
+            Write-Host "Source: " $sourcePath -BackgroundColor DarkRed -ForegroundColor White
+            Write-Host "Destination: " $destinationPath -BackgroundColor DarkGreen -ForegroundColor White
+            $confirm = Read-Host "The copying process will start. Do you confirm? (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
-            robocopy "$sourcePath" "$destinationPath" /s /e /mt:32 /r:0 /w:0 /xf /xn /xo /xjd *.tmp /A-:SH /xd 'C:\System Volume Information'
+            robocopy "$sourcePath" "$destinationPath " /s /e /mt:32 /r:0 /w:0 /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /tee /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log /xf "pagefile.sys" /xd "${sourceDisk}System Volume Information" /xd "RECYCLER" /xd "Temporary Files" /xd "Config.Msi" /xd ${sourceDisk}'$RECYCLE.BIN"'
+            attrib.exe -h  -s  -a $destinationPath
+            Write-Host "The process is completed! You can check the log $env:userprofile\Desktop\Robocopy-Backup.log" -BackgroundColor DarkGreen -ForegroundColor White
             Read-Host -Prompt "Press Enter to exit!"
             Exit
         }
