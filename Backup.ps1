@@ -139,7 +139,7 @@ try {
         else { Clear-Host; Select-Action }
     }
     Function Recover_UserData {
-        Write-Host "Please select the user that you want to recover:" -Backgroundcolor DarkCyan -ForeGroundColor White
+        Write-Host "Please select the user that you want to recover:" -Backgroundcolor White -ForeGroundColor Black
         Timeout /t 1 | Out-Null
         $destinationUser = "C:"
         $destinationUser += Select-User(0)
