@@ -33,13 +33,14 @@ try {
             if (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+")) { Write-Warning $inputWarning }
         } while (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+"))
         $script:Selected_Disk = $disk[$Disk_Index]
-        Select-User(1)
+        Select-User("Backup")
 
     }
     Function Select-User {
         param(
             $Action
         )
+        if ($Action -eq "Recover") { $Selected_Disk = "C:" }
         $Users = @(Get-ChildItem -Path "${Selected_Disk}\Users\" -Name -ErrorAction Stop)
         $U_Index_List = @()
         Write-Host "########### USER LIST IN $Selected_Disk ###########" -Backgroundcolor DarkCyan -ForeGroundColor White
@@ -55,10 +56,10 @@ try {
         } while (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+"))
         $Selected_User = $Users[$User_Index]
         $sourcePath = "$Selected_Disk\Users\${Selected_User}"
-        if ($Action -eq 0) {
+        if ($Action -eq "Recover") {
             return $sourcePath
         }
-        elseif ($Action -eq 1) {
+        elseif ($Action -eq "Backup") {
             $Folder_Name = (Get-Date -Format "dd.MM.yyyy") + "_${Selected_User}"
             Write-Host "Please select the destination folder:" -Backgroundcolor DarkCyan -ForeGroundColor White
             Timeout /t 1 | Out-Null
@@ -141,8 +142,7 @@ try {
     Function Recover_UserData {
         Write-Host "Please select the user that you want to recover:" -Backgroundcolor White -ForeGroundColor Black
         Timeout /t 1 | Out-Null
-        $destinationUser = "C:"
-        $destinationUser += Select-User(0)
+        $destinationUser += Select-User("Recover")
         Write-Host "Please select the backup folder that contains user data:" -Backgroundcolor DarkCyan -ForeGroundColor White
         Timeout /t 1 | Out-Null
         $BackupFolder = Get-Folder
