@@ -6,7 +6,7 @@ try {
     Function Select-Action {
         Write-Host "1) Backup User Data" -BackgroundColor DarkGreen -ForegroundColor White
         Write-Host "(It will copy the following folders of selected user: Desktop, Documents, Downloads, Google Chrome user data)" -BackgroundColor DarkGreen -ForegroundColor White
-        Write-Host "2) Recover User Data" -BackgroundColor DarkRed -ForegroundColor White
+        Write-Host "2) Recover User Data" -BackgroundColor DarkMagenta -ForegroundColor White
         Write-Host "3) Backup a Folder or Entire Disk" -BackgroundColor DarkBlue -ForegroundColor White
         Write-Host "4) Exit" -BackgroundColor DarkRed -ForegroundColor White
     
@@ -139,6 +139,10 @@ try {
         else { Clear-Host; Select-Action }
     }
     Function Recover_UserData {
+        Write-Host "Please select the user that you want to recover:" -Backgroundcolor DarkCyan -ForeGroundColor White
+        Timeout /t 1 | Out-Null
+        $destinationUser = "C:"
+        $destinationUser += Select-User(0)
         Write-Host "Please select the backup folder that contains user data:" -Backgroundcolor DarkCyan -ForeGroundColor White
         Timeout /t 1 | Out-Null
         $BackupFolder = Get-Folder
@@ -147,11 +151,6 @@ try {
             Write-Warning "You have not selected a backup folder!"
             Select-Action
         }
-        Clear-Host
-        Write-Host "Please select the user that you want to recover:" -Backgroundcolor DarkCyan -ForeGroundColor White
-        Timeout /t 1 | Out-Null
-        $destinationUser = "C:"
-        $destinationUser += Select-User(0)
         Write-Host "Backup Folder path (source): $BackupFolder" -BackgroundColor DarkRed -ForegroundColor White
         Write-Host "User to recover (destination): $destinationUser" -BackgroundColor DarkBlue -ForegroundColor White
         do {
