@@ -5,7 +5,7 @@ try {
     Clear-Host
     Function Explanation {
         Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ROBOCOPY-BACKUP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`n`n"
-        Write-Host "1) This option will copy the following folders of selected user to specified destination: Desktop, Documents, Downloads, Videos, Pictures, Music, Google Chrome user data`n"
+        Write-Host "1) This option will copy the following folders of selected user to selected destination: Desktop, Documents, Downloads, Videos, Pictures, Music Google Chrome user data`n"
         Write-Host "2) If the backup was taken with this script, using this option, the data in the backup folder you selected will be copied to the folders specified in the top line.`n"
         Write-Host "3) This option; copies a selected folder (this could be the entire disk) to the specified folder.`n`n"
         Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`n`n"
@@ -162,7 +162,7 @@ try {
             Timeout /t 1 | Out-Null
             Select-Action
         }
-        Write-Host "Backup Folder path (source): $BackupFolder" -BackgroundColor DarkRed -ForegroundColor White
+        Write-Host `n`n"Backup Folder path (source): $BackupFolder" -BackgroundColor DarkRed -ForegroundColor White
         Write-Host "User to recover (destination): $destinationUser" -BackgroundColor DarkBlue -ForegroundColor White
         do {
             $confirm = Read-Host "The recovery process will start. Do you confirm? (Y/N)"
