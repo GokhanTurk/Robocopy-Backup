@@ -85,7 +85,7 @@ try {
     }
     Function Backup-UserData {
         do {
-            $confirm = Read-Host "Are you confirming that $Selected_User files will be copied to ${destinationPath} (Y/N)"
+            $confirm = Read-Host "Do you confirm that $Selected_User files will be copied to ${destinationPath} (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
             robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
