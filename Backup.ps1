@@ -88,13 +88,13 @@ try {
             $confirm = Read-Host "Do you confirm that $Selected_User files will be copied to ${destinationPath} (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
-            robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\Documents\" "$destinationPath\Documents"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\Pictures\" "$destinationPath\Pictures"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\Videos\" "$destinationPath\Videos"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\Music\" "$destinationPath\Music"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Desktop\" "$destinationPath\Desktop"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Downloads\" "$destinationPath\Downloads"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Documents\" "$destinationPath\Documents"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Pictures\" "$destinationPath\Pictures"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Videos\" "$destinationPath\Videos"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\Music\" "$destinationPath\Music"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$sourcePath\AppData\Local\Google\" "$destinationPath\Google"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
             attrib.exe -h  -s  -a $destinationPath\Desktop
             attrib.exe -h  -s  -a $destinationPath\Downloads
             attrib.exe -h  -s  -a $destinationPath\Documents
@@ -168,13 +168,13 @@ try {
             $confirm = Read-Host "The recovery process will start. Do you confirm? (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
-            robocopy "$BackupFolder\Desktop\" "$destinationUser\Desktop"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Downloads\" "$destinationUser\Downloads"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Documents\" "$destinationUser\Documents"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Pictures\" "$destinationUser\Pictures"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Videos\" "$destinationUser\Videos"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Music\" "$destinationUser\Music"  /s /e /mt:32 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
-            robocopy "$BackupFolder\Google\" "$destinationUser\AppData\Local\Google\"  /s /e /mt:32 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Desktop\" "$destinationUser\Desktop"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Downloads\" "$destinationUser\Downloads"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Documents\" "$destinationUser\Documents"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Pictures\" "$destinationUser\Pictures"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Videos\" "$destinationUser\Videos"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Music\" "$destinationUser\Music"  /s /e /mt:8 /r:0 /w:0 /fp /tee /eta /v /xf /xn /xo /xjd *.tmp /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
+            robocopy "$BackupFolder\Google\" "$destinationUser\AppData\Local\Google\"  /s /e /mt:8 /r:0 /w:0 /tee /fp /eta /v /A-:SH /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
             attrib.exe -h  -s  -a $destinationUser\Desktop
             attrib.exe -h  -s  -a $destinationUser\Downloads
             attrib.exe -h  -s  -a $destinationUser\Documents
