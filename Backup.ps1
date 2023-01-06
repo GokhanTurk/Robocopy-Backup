@@ -3,7 +3,7 @@ try {
     [string[]]$confirm
     $inputWarning = "INPUTS MUST BE A NUMBER!"
     Clear-Host
-    Function Explanation{
+    Function Explanation {
         Write-Host "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ROBOCOPY-BACKUP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`n`n"
         Write-Host "1) This option will copy the following folders of selected user to selected destination: Desktop, Documents, Downloads, Videos, Pictures, Music Google Chrome user data`n"
         Write-Host "2) If the backup was taken with this script, using this option, the data in the backup folder you selected will be copied to the folders specified in the top line.`n"
@@ -22,7 +22,7 @@ try {
             2 { Recover_UserData }
             3 { Backup-Folder }
             4 { Exit }
-            default { Clear-Host; Write-Warning $inputWarning; Select-Action }
+            default { Clear-Host; Write-Warning $inputWarning; Timeout /t 1 | Out-Null; Select-Action }
         }
     }
     Function Select-Disk {
@@ -37,7 +37,7 @@ try {
         }
         do {
             $Disk_Index = Read-Host "Select the source drive"
-            if (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+")) { Write-Warning $inputWarning }
+            if (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+")) { Write-Warning $inputWarning; Timeout /t 1 | Out-Null }
         } while (($D_Index_List -notcontains $Disk_index) -or ($Disk_index -notmatch "\d+"))
         $script:Selected_Disk = $disk[$Disk_Index]
         Select-User("Backup")
@@ -59,7 +59,7 @@ try {
         }
         do {
             $User_Index = Read-Host "Select the username"
-            if (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+")) { Write-Warning $inputWarning }
+            if (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+")) { Write-Warning $inputWarning; Timeout /t 1 | Out-Null }
         } while (($U_Index_List -notcontains $User_index) -or ($User_index -notmatch "\d+"))
         $Selected_User = $Users[$User_Index]
         $sourcePath = "$Selected_Disk\Users\${Selected_User}"
@@ -74,11 +74,12 @@ try {
             if ("" -eq $destinationPath) {
                 Clear-Host
                 Write-Warning "You have not selected a destination folder!"
+                Timeout /t 1 | Out-Null
                 Select-Action
             }
             $destinationPath += "\${Folder_Name}"
             [string] $DestinationDisk = $destinationPath[0] + ":"
-            if ($DestinationDisk -eq $Selected_Disk) { Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Select-Action }
+            if ($DestinationDisk -eq $Selected_Disk) { Clear-Host; Write-Warning "You cannot copy to the same drive. It causes a loop. Please select a different drive!"; Timeout /t 1 | Out-Null; Select-Action }
             else { Backup-UserData }
         }
     }
@@ -114,6 +115,7 @@ try {
         if ("" -eq $sourcePath) {
             Clear-Host
             Write-Warning "You have not selected a source folder!"
+            Timeout /t 1 | Out-Null
             Select-Action
         }
         Write-Host "Please select the destination folder:" -Backgroundcolor DarkGreen -ForeGroundColor White
@@ -122,6 +124,7 @@ try {
         if ("" -eq $destinationPath) {
             Clear-Host
             Write-Warning "You have not selected a destination folder!"
+            Timeout /t 1 | Out-Null
             Select-Action
         }
         $sourceFolderName = Split-Path $sourcePath -Leaf
@@ -156,6 +159,7 @@ try {
         if ("" -eq $BackupFolder) {
             Clear-Host
             Write-Warning "You have not selected a backup folder!"
+            Timeout /t 1 | Out-Null
             Select-Action
         }
         Write-Host "Backup Folder path (source): $BackupFolder" -BackgroundColor DarkRed -ForegroundColor White
@@ -218,6 +222,7 @@ try {
 }
 catch [System.Management.Automation.ItemNotFoundException] {
     Write-Warning "An error has occurred! The cause of this may be that there is no user profile on the disk you have selected!"
+    Timeout /t 2 | Out-Null
     Select-Action
 }
 catch {
