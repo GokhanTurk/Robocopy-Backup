@@ -142,7 +142,7 @@ try {
             $confirm = Read-Host "The copying process will start. Do you confirm? (Y/N)"
         } while ("y", "n" -notcontains $confirm )
         if ($confirm -eq "y") {
-            robocopy "$sourcePath" "$destinationPath " /s /e /j /r:0 /w:0 /mt:$processorCoreCount /fp /eta /v /xn /xo /xj /xjd /xjf /xf *.tmp /A-:SH /tee /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log /xf "pagefile.sys" /xd "${sourceDisk}System Volume Information" /xd "RECYCLER" /xd "Temporary Files" /xf "Config.Msi" /xd ${sourceDisk}'$RECYCLE.BIN"'
+            robocopy "$sourcePath" "$destinationPath " /s /e /j /r:0 /w:0 /mt:$processorCoreCount /v /xn /xo /xj /xjd /xjf /xf *.tmp /A-:SH /xf "pagefile.sys" /xd "${sourceDisk}System Volume Information" /xd "RECYCLER" /xd "Temporary Files" /xf "Config.Msi" /xd ${sourceDisk}'$RECYCLE.BIN"' /log+:$env:USERPROFILE\Desktop\Robocopy-Backup.log
             attrib.exe -h  -s  -a $destinationPath
             Write-Host "The process is completed! You can check the log $env:userprofile\Desktop\Robocopy-Backup.log" -BackgroundColor DarkGreen -ForegroundColor White
             Read-Host -Prompt "Press Enter to exit!"
